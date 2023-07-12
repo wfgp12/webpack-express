@@ -1,15 +1,21 @@
 const path = require('path');
+const nodeExternals = require('webpack-node-externals')
+
+const NODE_ENV = process.env.NODE_ENV;
+const PORT = process.env.PORT;
 
 module.exports = {
     name: 'express-server',
-    entry: './src/index.js',
+    entry: './src/index.ts',
     target: 'node',
+    mode: NODE_ENV,
+    externals: [nodeExternals()],
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'index.js'
     },
     resolve: {
-        extensions: ['.js']
+        extensions: ['.js', '.ts']
     },
     module: {
         rules: [
@@ -19,6 +25,12 @@ module.exports = {
                 use:{
                     loader: 'babel-loader'
                 }
+            },
+            {
+                test: /\.ts$/,
+                use: [
+                    'ts-loader'
+                ]
             }
         ]
     }
